@@ -53,7 +53,7 @@ const Home: NextPage = () => {
           <h1>DiscordTag</h1>
           <h1>Actions</h1>
         </div>
-        <UserCard name="Ethan Zentz" email=".sdakfyes@gmail.com" />
+        
         {(volunteers && (
           <div>
             {volunteers.map((volunteer) => (

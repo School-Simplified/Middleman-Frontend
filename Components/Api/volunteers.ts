@@ -13,7 +13,7 @@ const client = new ApolloClient({
 
 const volunteersQuery = gql`
   query Volunteers {
-    volunteers(limit: 20) {
+    volunteers(limit: 30) {
       fullName
       strikes
       orgEmail
