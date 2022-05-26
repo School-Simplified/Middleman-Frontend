@@ -2,9 +2,8 @@ import { useState, useEffect } from "react";
 import type { NextPage } from "next";
 
 import getVolunteers from "../Components/Api/volunteers";
+import Table from "../Components/table/table";
 
-import { Button, ButtonGroup } from "@chakra-ui/react";
-import { HamburgerIcon } from "@chakra-ui/icons";
 import { FiTrash2 } from "react-icons/fi";
 import { BiDownArrow } from "react-icons/bi";
 
@@ -46,46 +45,14 @@ const Home: NextPage = () => {
         <SideNav />
       </div>
       <div className="w-full px-5 py-3">
-        <h1 className="font-semibold text-5xl">Volunteers</h1>
-        <div className="flex mt-4 w-full justify-between px-11 py-3 bg-slate-300 rounded-t-lg font-semibold">
-          <h1>Name</h1>
-          <h1>Org Email</h1>
-          <h1>DiscordTag</h1>
-          <h1>Actions</h1>
-        </div>
-        
         {(volunteers && (
           <div>
-            {volunteers.map((volunteer) => (
-              <UserCard
-                name={volunteer.fullName}
-                email={volunteer.orgEmail}
-                strikes={volunteer.strikes}
-                discordTag={volunteer.discordTag}
-              />
-            ))}
+            <Table volData={volunteers} />
           </div>
         )) || <h1>Loading...</h1>}
       </div>
     </div>
   );
-
-  /*   return (
-    (volunteers && (
-      <div>
-        <h1 className="text-3xl">Volunteers</h1>
-        {volunteers.map((volunteer) => (
-          <div key={volunteer.id}>
-            <h2>{volunteer.fullName}</h2>
-            <p>
-              {volunteer.strikes} strikes
-              {volunteer.orgEmail && <span> | {volunteer.orgEmail}</span>}
-            </p>
-          </div>
-        ))}
-      </div>
-    )) || <h1>Loading...</h1>
-  ); */
 };
 
 export default Home;
