@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import type { NextPage } from "next";
 
-import getVolunteers from "../Components/Api/volunteers";
+import { getVolunteers } from "../Components/Api/volunteers";
 import Table from "../Components/table/table";
 
 import { FiTrash2 } from "react-icons/fi";
@@ -31,14 +31,12 @@ const Home: NextPage = () => {
 
   const fetchVolunteers = async () => {
     const result = await getVolunteers();
-    const data = result.volunteers;
-    setVolunteers(data);
+    setVolunteers(result);
   };
 
   useEffect(() => {
     fetchVolunteers();
   }, []);
-
   return (
     <div className="w-full flex">
       <div className="w-[20%] h-screen sticky top-0 2xl:w-[15%]">
@@ -47,7 +45,7 @@ const Home: NextPage = () => {
       <div className="w-full px-5 py-3">
         {(volunteers && (
           <div>
-            <Table volData={volunteers} />
+            <Table volData={volunteers} userUpdated={fetchVolunteers} />
           </div>
         )) || <h1>Loading...</h1>}
       </div>

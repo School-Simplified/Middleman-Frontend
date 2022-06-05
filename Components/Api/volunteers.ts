@@ -1,49 +1,31 @@
-import {
-  ApolloClient,
-  InMemoryCache,
-  ApolloProvider,
-  useQuery,
-  gql,
-} from "@apollo/client";
-
-const client = new ApolloClient({
-  uri: "http://localhost:4000/graphql",
-  cache: new InMemoryCache(),
-});
-
-const volunteersQuery = gql`
-  query Volunteers {
-    volunteers(limit: 50) {
-      fullName
-      strikes
-      orgEmail
-      departments
-      ranks
-      departmentDivision
-      activityStatus
-      contract
-      breakDuration
-      discordTag
-      rodeID
-    }
-  }
-`;
-
+import axios from "axios";
+const API_URL = "http://127.0.0.1:4000";
 type Volunteer = {
   fullName: string;
   strikes?: number;
   orgEmail?: string;
 };
 
-const getVolunteers = async () => {
-  //const { loading, error, data } = useQuery(getUsersQuery);
-  const { loading, error, data } = await client.query({
-    query: volunteersQuery,
-  });
+export const getVolunteers = async () => {
+  // //const { loading, error, data } = useQuery(getUsersQuery);
+  // const { loading, error, data } = await client.query({
+  //   query: volunteersQuery,
+  // });
 
-  console.log(data);
-  //return result;
-  return data;
+  // console.log(data);
+  // //return result;
+  // return data;
+
+  const response = await axios.get(`${API_URL}/api/volunteers`);
+  return response.data;
 };
 
-export default getVolunteers;
+export const deleteVolunteer = async (id: number) => {
+  const response = await axios.delete(`${API_URL}/api/volunteers/${id}`);
+  return response.data;
+};
+
+export const createVolunteer = async (data: any) => {
+  const response = await axios.post(`${API_URL}/api/volunteers`, data);
+  return response.data;
+};
