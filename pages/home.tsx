@@ -3,12 +3,10 @@ import type { NextPage } from "next";
 
 import { getVolunteers } from "../Components/Api/volunteers";
 import Table from "../Components/table/table";
-
+import Script from "next/script";
 import { FiTrash2 } from "react-icons/fi";
 import { BiDownArrow } from "react-icons/bi";
-
 import SideNav from "../Components/SideNav";
-
 const UserCard = ({ name, email, strikes, discordTag }) => {
   return (
     <>
@@ -37,19 +35,23 @@ const Home: NextPage = () => {
   useEffect(() => {
     fetchVolunteers();
   }, []);
+
   return (
-    <div className="w-full flex">
-      <div className="w-[20%] h-screen sticky top-0 2xl:w-[15%]">
-        <SideNav />
+    <>
+      <script src="https://apis.google.com/js/api.js"></script>
+      <div className="w-full flex">
+        <div className="w-[20%] h-screen sticky top-0 2xl:w-[15%]">
+          <SideNav />
+        </div>
+        <div className="w-full px-5 py-3">
+          {(volunteers && (
+            <div>
+              <Table volData={volunteers} userUpdated={fetchVolunteers} />
+            </div>
+          )) || <h1>Loading...</h1>}
+        </div>
       </div>
-      <div className="w-full px-5 py-3">
-        {(volunteers && (
-          <div>
-            <Table volData={volunteers} userUpdated={fetchVolunteers} />
-          </div>
-        )) || <h1>Loading...</h1>}
-      </div>
-    </div>
+    </>
   );
 };
 
