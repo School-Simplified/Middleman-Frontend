@@ -20,6 +20,11 @@ export const getVolunteers = async () => {
   return response.data;
 };
 
+export const getVolunteerByID = async (id: number) => {
+  const response = await axios.get(`${API_URL}/api/volunteers/${id}`)
+  return response.data;
+}
+
 export const deleteVolunteer = async (id: number) => {
   const response = await axios.delete(`${API_URL}/api/volunteers/${id}`);
   return response.data;
@@ -29,3 +34,9 @@ export const createVolunteer = async (data: any) => {
   const response = await axios.post(`${API_URL}/api/volunteers`, data);
   return response.data;
 };
+
+export const updateVolunteer = async (id: number, data: any) => {
+  console.log(id, data)
+  const response = await axios.put(`${API_URL}/api/volunteers/${id}`, data)
+  return response.data;
+}

@@ -3,16 +3,23 @@ import { useTable, useGlobalFilter } from "react-table";
 import COLUMNS from "./columns";
 import { AiOutlinePlus } from "react-icons/ai";
 import { GlobalFilter } from "./GlobalFilter";
-import { DeleteIcon } from "@chakra-ui/icons";
+import { DeleteIcon, EditIcon, CloseIcon } from "@chakra-ui/icons";
 import {
   getVolunteers,
   deleteVolunteer,
   createVolunteer,
+  updateVolunteer,
+  getVolunteerByID,
 } from "../Api/volunteers";
+import UpdateVolunteerForm from "./updateVolunteerForm";
+import { identitytoolkit } from "googleapis/build/src/apis/identitytoolkit";
+
 const Table = (props) => {
   const volData = props.volData;
   const columns = useMemo(() => COLUMNS, []);
   const [visible, setVisiblity] = useState(false);
+  const [updateFormVisible, setUpdateFormVisible] = useState(false);
+  const [updateUserID, setUpdateUserID] = useState(-1);
 
   // new user data
   const [emailAddress, setEmail] = useState("");
@@ -28,6 +35,8 @@ const Table = (props) => {
       fullName,
       discordTag,
       emailAddress,
+      orgEmail,
+      department_division,
     };
     const response = await createVolunteer(req_data);
     await props.userUpdated();
@@ -40,6 +49,23 @@ const Table = (props) => {
     await props.userUpdated();
     alert("user deleted!");
   };
+
+  const getUser = async (id) => {
+    const resp = await getVolunteerByID(id);
+    return resp;
+  }
+
+  const updateUser = async (req_data) => {
+    const resp = await updateVolunteer(updateUserID, req_data);
+    await props.userUpdated();
+    alert("user updated!");
+    setUpdateFormVisible(false)
+  }
+
+  const getUpdateUserRow = async (row) => {
+    setUpdateUserID(row.original.ID);
+    setUpdateFormVisible(true)
+  }
 
   const {
     getTableProps,
@@ -77,7 +103,7 @@ const Table = (props) => {
                 className="absolute right-4 top-4 p-2 rounded-xl text-white border-2 border-gray-200 hover:bg-gray-200 hover:border-purple-400 hover:text-purple-400"
                 onClick={() => setVisiblity(false)}
               >
-                x
+                <CloseIcon/>
               </div>
               <form
                 className=" flex flex-col items-center justify-center h-full"
@@ -148,6 +174,13 @@ const Table = (props) => {
             </div>
           )}
         </div>
+        {updateFormVisible && 
+        <UpdateVolunteerForm 
+          setVisible={setUpdateFormVisible} 
+          updateUser={updateUser} 
+          updateUserID={updateUserID}
+          getUser={getUser}
+        />}
       </div>
       <table {...getTableProps()}>
         <thead>
@@ -172,6 +205,10 @@ const Table = (props) => {
                         <DeleteIcon
                           className="float-right"
                           onClick={() => deleteUser(row)}
+                        />
+                        <EditIcon
+                          className="float-right"
+                          onClick={() => getUpdateUserRow(row)}
                         />
                       </td>
                     );
