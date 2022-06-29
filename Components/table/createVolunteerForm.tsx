@@ -1,46 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { CloseIcon } from "@chakra-ui/icons";
 
-const UpdateVolunteerForm = params => {
+const CreateVolunteerForm = (params: any) => {
 
-  type UserInfo = {
-    emailAddress: string,
-    fullName: string,
-    discordTag: string,
-    orgEmail: string,
-    department_division: string,
-  };
-
-  const [userInfo, setUserInfo] = useState<UserInfo | null>(null);
   const [emailAddress, setEmail] = useState<string>("");
   const [fullName, setName] = useState<string>("");
   const [discordTag, setTag] = useState<string>("");
   const [orgEmail, setOrgEmail] = useState<string>("");
   const [department_division, setDepartmentDivision] = useState<string>("");
-
-  useEffect(() => {
-   params.getUser(params.updateUserID).then((result:any) => {
-       setUserInfo(result)
-   })
-  }, [])
-
-  useEffect(() => {
-    if (userInfo?.emailAddress != null) {
-        setEmail(userInfo.emailAddress)
-    }
-    if (userInfo?.fullName != null) {
-        setName(userInfo.fullName)
-    }
-    if (userInfo?.discordTag != null) {
-        setTag(userInfo.discordTag)
-    }
-    if (userInfo?.orgEmail != null) {
-        setOrgEmail(userInfo.orgEmail)
-    }
-    if (userInfo?.department_division != null) {
-        setDepartmentDivision(userInfo.department_division)
-    }
-  }, [userInfo]);
 
   const submit = (e: Event) => {
     e.preventDefault();
@@ -51,7 +18,7 @@ const UpdateVolunteerForm = params => {
         orgEmail: orgEmail,
         department_division: department_division,
       }
-      params.updateUser(req_data);
+      params.createUser(req_data);
   }
 
   return (
@@ -68,7 +35,7 @@ const UpdateVolunteerForm = params => {
         >
         <div className="w-1/2 h-1/2 border-white border-2 p-4 rounded-md my-2 flex flex-col justify-center">
             <span className="text-3xl block text-center text-yellow-200">
-                Edit Volunteer
+                Add Volunteer
             </span>
             <div className="grid grid-flow-row grid-rows-5 justify-center items-center w-full gap-y-6">
             <div className="flex flex-row items-center w-full justify-center">
@@ -132,4 +99,4 @@ const UpdateVolunteerForm = params => {
   );
 };
 
-export default UpdateVolunteerForm;
+export default CreateVolunteerForm;

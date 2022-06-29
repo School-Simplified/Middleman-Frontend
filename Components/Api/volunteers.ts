@@ -1,5 +1,6 @@
 import axios from "axios";
 const API_URL = "http://127.0.0.1:8000";
+const scriptId = "16CDtcdnJV_2MxXdRUXRLmfWMm1cUewpzzFCd2QOf07BPXvQJx4LXxdh0"
 type Volunteer = {
   fullName: string;
   strikes?: number;
@@ -36,7 +37,19 @@ export const createVolunteer = async (data: any) => {
 };
 
 export const updateVolunteer = async (id: number, data: any) => {
-  console.log(id, data)
   const response = await axios.put(`${API_URL}/api/volunteers/${id}`, data)
   return response.data;
 }
+
+export const getGoogleVolunteers = async () => {
+  const token = localStorage.getItem("token")
+  const header = {
+    headers: { Authorization: `Bearer ${token}` }
+  }
+  const body = {
+    function: "listAllUsers",
+    devMode: "true"
+  }
+  const response = await axios.post(`https://script.googleapis.com/v1/scripts/${scriptId}:run`, body, header);
+  return response.data;
+};
