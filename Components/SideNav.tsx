@@ -76,7 +76,7 @@ const SideNav = () => {
       <div className="flex flex-col mt-2">
         <MenuItem Name="Home" children={<AiOutlineHome size={23} />} />
         <MenuItem Name="Volunteers" children={<BsPeople size={23} />} />
-        <MenuItem Name="Documents" children={<ImFilesEmpty size={23} />} />
+        <MenuItem Name="Resources" children={<ImFilesEmpty size={23} />} />
       </div>
     </div>
   );

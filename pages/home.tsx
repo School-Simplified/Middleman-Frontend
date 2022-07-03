@@ -27,15 +27,8 @@ const UserCard = ({ name, email, strikes, discordTag }) => {
 };
 
 const Home: NextPage = () => {
-  const [volunteers, setVolunteers] = useState(null);
-
-  const fetchVolunteers = async () => {
-    const result = await getVolunteers();
-    setVolunteers(result);
-  };
 
   useEffect(() => {
-    fetchVolunteers();
     var params = window.location.href.split("?")
     if (params.length > 1 && params[1] !== "") {
       const token = params[1].split("=")[1]
