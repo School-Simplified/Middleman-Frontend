@@ -3,43 +3,65 @@ import { useTable, useGlobalFilter } from "react-table";
 import COLUMNS from "./columns";
 import { AiOutlinePlus } from "react-icons/ai";
 import { GlobalFilter } from "./GlobalFilter";
-import { DeleteIcon } from "@chakra-ui/icons";
+import { DeleteIcon, EditIcon, CloseIcon } from "@chakra-ui/icons";
 import {
   getVolunteers,
   deleteVolunteer,
   createVolunteer,
+  updateVolunteer,
+  getVolunteerByID,
 } from "../Api/volunteers";
-const Table = (props) => {
+import UpdateVolunteerForm from "./updateVolunteerForm";
+import { identitytoolkit } from "googleapis/build/src/apis/identitytoolkit";
+import VolunteerStatusForm from "./volunteerStatusForm";
+import CreateVolunteerForm from "./createVolunteerForm";
+
+const Table = (props: any) => {
   const volData = props.volData;
   const columns = useMemo(() => COLUMNS, []);
   const [visible, setVisiblity] = useState(false);
+  const [updateFormVisible, setUpdateFormVisible] = useState(false);
+  const [statusFormVisible, setStatusFormVisible] = useState(false);
+  const [updateUserID, setUpdateUserID] = useState(-1);
 
-  // new user data
-  const [emailAddress, setEmail] = useState("");
-  const [fullName, setName] = useState("");
-  const [discordTag, setTag] = useState("");
-  const [orgEmail, setOrgEmail] = useState("");
-  const [department_division, setDepartmentDivision] = useState("");
   // data props
   const data = volData;
-  const createUser = async (e: Event) => {
-    e.preventDefault();
-    const req_data = {
-      fullName,
-      discordTag,
-      emailAddress,
-    };
+  const createUser = async (req_data: any) => {
     const response = await createVolunteer(req_data);
     await props.userUpdated();
     setVisiblity(false);
   };
 
-  const deleteUser = async (row) => {
+  /*
+  const deleteUser = async (row: any) => {
     const user_id = row.original.ID; // indexes start at 0 but id's start at 1. transition to uuid's instead of autoincrement is also worth considering.
     const resp = await deleteVolunteer(user_id);
     await props.userUpdated();
     alert("user deleted!");
-  };
+  };*/
+
+  const getUser = async (id: number) => {
+    const resp = await getVolunteerByID(id);
+    return resp;
+  }
+
+  const updateUser = async (req_data: any) => {
+    const resp = await updateVolunteer(updateUserID, req_data);
+    await props.userUpdated();
+    alert("user updated!");
+    setUpdateFormVisible(false)
+    setStatusFormVisible(false)
+  }
+
+  const getUpdateUserRow = async (row: any) => {
+    setUpdateUserID(row.original.ID);
+    setUpdateFormVisible(true)
+  }
+
+  const getStatusUserRow = async (row: any) => {
+    setUpdateUserID(row.original.ID);
+    setStatusFormVisible(true)
+  }
 
   const {
     getTableProps,
@@ -69,85 +91,30 @@ const Table = (props) => {
             size={25}
             onClick={() => setVisiblity(true)}
           />
-
-          {/* create user modal/form */}
-          {visible && (
-            <div className="w-screen h-screen fixed left-0 top-0 bg-purple-400 flex-col">
-              <div
-                className="absolute right-4 top-4 p-2 rounded-xl text-white border-2 border-gray-200 hover:bg-gray-200 hover:border-purple-400 hover:text-purple-400"
-                onClick={() => setVisiblity(false)}
-              >
-                x
-              </div>
-              <form
-                className=" flex flex-col items-center justify-center h-full"
-                onSubmit={createUser}
-              >
-                <div className="w-1/2 h-1/2 border-white border-2 p-4 rounded-md my-2 flex flex-col justify-center">
-                  <span className="text-3xl block text-center text-yellow-200">
-                    Add Employee
-                  </span>
-                  <div className="grid grid-flow-row grid-rows-5 justify-center items-center w-full gap-y-6">
-                    <div className="flex flex-row items-center w-full justify-center">
-                      <label className="text-white text-2xl">Email</label>
-                      <input
-                        value={emailAddress}
-                        className="p-1 rounded-md w-full ml-4 "
-                        onChange={(e) => setEmail(e.target.value)}
-                      />
-                    </div>
-                    <div className="grid grid-cols-2 w-full">
-                      <div className="w-full col-span-1 text-lg flex flex-row items-center">
-                        <label className="text-white text-xl">Discord</label>
-                        <input
-                          value={discordTag}
-                          className="p-1 rounded-md text-md w-full mx-2"
-                          onChange={(e) => setTag(e.target.value)}
-                        />
-                      </div>
-                      <div className="w-full col-span-1 text-lg flex flex-row items-center">
-                        <label className="text-white text-xl">Name</label>
-                        <input
-                          value={fullName}
-                          className="p-1 rounded-md text-md w-full mx-2"
-                          onChange={(e) => setName(e.target.value)}
-                        />
-                      </div>
-                    </div>
-                    <div className="flex flex-row items-center w-full justify-center">
-                      <label className="text-white text-2xl inline-block whitespace-nowrap">
-                        Organization Email
-                      </label>
-                      <input
-                        value={orgEmail}
-                        className="p-1 rounded-md text-md w-full ml-4"
-                        onChange={(e) => setOrgEmail(e.target.value)}
-                      />
-                    </div>
-                    <div className="flex flex-row items-center w-full justify-center">
-                      <label className="text-white text-2xl inline-block whitespace-nowrap">
-                        Department(s)
-                      </label>
-                      <input
-                        value={department_division}
-                        className="p-1 rounded-md text-md w-full ml-4"
-                        onChange={(e) => setDepartmentDivision(e.target.value)}
-                      />
-                    </div>
-                    <div>
-                      <button
-                        type="submit"
-                        className="border-2 border-white p-2 rounded-xl text-white hover:bg-white hover:text-purple-400 w-full transition-all"
-                      >
-                        Submit
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </form>
-            </div>
-          )}
+          {/*create user modal*/}
+          {visible &&
+          <CreateVolunteerForm
+            setVisible={setVisiblity}
+            createUser={createUser}
+          />
+          }
         </div>
+        {/*update user modal*/}
+        {updateFormVisible && 
+        <UpdateVolunteerForm 
+          setVisible={setUpdateFormVisible} 
+          updateUser={updateUser} 
+          updateUserID={updateUserID}
+          getUser={getUser}
+        />}
+        {/*update user status modal*/}
+        {statusFormVisible && 
+        <VolunteerStatusForm 
+          setVisible={setStatusFormVisible} 
+          updateUser={updateUser} 
+          updateUserID={updateUserID}
+          getUser={getUser}
+        />}
       </div>
       <table {...getTableProps()}>
         <thead>
@@ -169,9 +136,27 @@ const Table = (props) => {
                     return (
                       <td {...cell.getCellProps()}>
                         {cell.render("Cell")}{" "}
-                        <DeleteIcon
+                        <EditIcon
                           className="float-right"
-                          onClick={() => deleteUser(row)}
+                          onClick={() => getUpdateUserRow(row)}
+                        />
+                      </td>
+                    );
+                  }
+                  else if (cell.column.Header == "Status") {
+                    var color;
+                    if (cell.value == "Active") {color = "text-green-500"}
+                    else if (cell.value == "On break") {color = "text-yellow-400"}
+                    else if (cell.value == "Resigned") {color = "text-red-500"}
+
+                    return (
+                      <td {...cell.getCellProps()}>
+                        <span className={color}>
+                          {cell.render("Cell")}{" "}
+                        </span>
+                        <EditIcon
+                          className="float-right"
+                          onClick={() => getStatusUserRow(row)}
                         />
                       </td>
                     );

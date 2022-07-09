@@ -10,6 +10,10 @@ export const COLUMNS = [{
         Header: 'Discord ID',
         accessor: 'discordTag',
     },
+    {
+        Header: 'Status',
+        accessor: 'activityStatus',
+    },
 ]
 
 export default COLUMNS

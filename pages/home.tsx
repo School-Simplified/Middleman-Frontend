@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import type { NextPage } from "next";
+import axios from "axios";
 
 import { getVolunteers } from "../Components/Api/volunteers";
 import Table from "../Components/table/table";
@@ -7,6 +8,7 @@ import Script from "next/script";
 import { FiTrash2 } from "react-icons/fi";
 import { BiDownArrow } from "react-icons/bi";
 import SideNav from "../Components/SideNav";
+
 const UserCard = ({ name, email, strikes, discordTag }) => {
   return (
     <>
@@ -25,15 +27,15 @@ const UserCard = ({ name, email, strikes, discordTag }) => {
 };
 
 const Home: NextPage = () => {
-  const [volunteers, setVolunteers] = useState(null);
-
-  const fetchVolunteers = async () => {
-    const result = await getVolunteers();
-    setVolunteers(result);
-  };
 
   useEffect(() => {
-    fetchVolunteers();
+    var params = window.location.href.split("?")
+    if (params.length > 1 && params[1] !== "") {
+      const token = params[1].split("=")[1]
+      const refresh = params[2].split("=")[1]
+      localStorage.setItem("token", token);
+      localStorage.setItem("refresh", refresh);
+    }
   }, []);
 
   return (
@@ -44,11 +46,7 @@ const Home: NextPage = () => {
           <SideNav />
         </div>
         <div className="w-full px-5 py-3">
-          {(volunteers && (
-            <div>
-              <Table volData={volunteers} userUpdated={fetchVolunteers} />
-            </div>
-          )) || <h1>Loading...</h1>}
+        <h1 className="font-semibold text-5xl mb-4">Home</h1>
         </div>
       </div>
     </>
