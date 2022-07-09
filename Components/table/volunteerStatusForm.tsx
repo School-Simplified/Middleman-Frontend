@@ -96,7 +96,7 @@ const VolunteerStatusForm = params => {
                 </AlertDialogHeader>
 
                 <AlertDialogBody>
-                Are you sure you want to change this volunteer's status?
+                Are you sure you want to edit this volunteer's status?
                 </AlertDialogBody>
 
                 <AlertDialogFooter>
@@ -104,7 +104,7 @@ const VolunteerStatusForm = params => {
                     Cancel
                 </Button>
                 <Button colorScheme='red' onClick={submit} ml={3}>
-                    Delete
+                    Edit
                 </Button>
                 </AlertDialogFooter>
             </AlertDialogContent>

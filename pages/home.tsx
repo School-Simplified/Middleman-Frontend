@@ -36,7 +36,6 @@ const Home: NextPage = () => {
       localStorage.setItem("token", token);
       localStorage.setItem("refresh", refresh);
     }
-
   }, []);
 
   return (
