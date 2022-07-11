@@ -1,9 +1,10 @@
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useTable, useGlobalFilter } from "react-table";
 import COLUMNS from "./columns";
 import { AiOutlinePlus } from "react-icons/ai";
+import Multiselect from 'multiselect-react-dropdown';
 import { GlobalFilter } from "./GlobalFilter";
-import { DeleteIcon, EditIcon, CloseIcon } from "@chakra-ui/icons";
+import { DeleteIcon, EditIcon, CloseIcon, UpDownIcon } from "@chakra-ui/icons";
 import {
   getVolunteers,
   deleteVolunteer,
@@ -17,12 +18,35 @@ import VolunteerStatusForm from "./volunteerStatusForm";
 import CreateVolunteerForm from "./createVolunteerForm";
 
 const Table = (props: any) => {
+
+  const defaultColumns = [
+    {
+      Header: "Name",
+      accessor: 'fullName',
+    },
+    {
+      Header: "Org Email",
+      accessor: 'orgEmail',
+    },
+    {
+      Header: "Discord ID",
+      accessor: 'discordTag',
+    },
+    {
+      Header: "Status",
+      accessor: 'activityStatus',
+    }
+  ]
+  
   const volData = props.volData;
-  const columns = useMemo(() => COLUMNS, []);
   const [visible, setVisiblity] = useState(false);
   const [updateFormVisible, setUpdateFormVisible] = useState(false);
   const [statusFormVisible, setStatusFormVisible] = useState(false);
   const [updateUserID, setUpdateUserID] = useState(-1);
+  const [columnOptions, setColumnOptions] = useState<any[]>(COLUMNS)
+  const [selectedColumnOptions, setSelectedColumnOptions] = useState<any[]>(defaultColumns)
+  const columns = useMemo(() => selectedColumnOptions, [selectedColumnOptions]);
+
 
   // data props
   const data = volData;
@@ -31,6 +55,24 @@ const Table = (props: any) => {
     await props.userUpdated();
     setVisiblity(false);
   };
+
+  const onColumnSelect = (selectedList: any[], selectedItem: any[]) => {
+    console.log(selectedList)
+    console.log(selectedItem)
+    const tempSelectedList = [...selectedList]
+    setSelectedColumnOptions(tempSelectedList)
+  }
+
+  const onColumnRemove = (selectedList: any[], removedItem: any[]) => {
+    console.log(selectedList)
+    console.log(removedItem)
+    const tempSelectedList = [...selectedList]
+    setSelectedColumnOptions(tempSelectedList)
+  }
+
+  useEffect(() => {
+    console.log(selectedColumnOptions)
+  }, [selectedColumnOptions])
 
   /*
   const deleteUser = async (row: any) => {
@@ -85,6 +127,14 @@ const Table = (props: any) => {
       <div className="w-full flex justify-between items-center">
         <h1 className="font-semibold text-5xl mb-4">Volunteers</h1>
         <div className="flex justify-between">
+          <Multiselect
+            className="max-w-sm"
+            options={columnOptions}
+            selectedValues={defaultColumns}
+            onSelect={onColumnSelect}
+            onRemove={onColumnRemove}
+            displayValue="Header"
+          />
           <GlobalFilter filter={globalFilter} setFilter={setGlobalFilter} />
           <AiOutlinePlus
             className="ml-11 hover:cursor-pointer"
@@ -121,7 +171,7 @@ const Table = (props: any) => {
           {headerGroups.map((headerGroup) => (
             <tr {...headerGroup.getHeaderGroupProps()}>
               {headerGroup.headers.map((column) => (
-                <th {...column.getHeaderProps()}>{column.render("Header")}</th>
+                <th {...column.getHeaderProps()}>{column.render("Header")} <UpDownIcon className="float-right mt-1"/> </th>
               ))}
             </tr>
           ))}

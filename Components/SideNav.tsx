@@ -79,7 +79,7 @@ const SideNav = () => {
   }, [email])
 
   useEffect(() => {
-    getInfo()
+    setTimeout(() => {getInfo()}, 1000)
   }, [])
 
   const sendAlert = () => {
@@ -92,7 +92,7 @@ const SideNav = () => {
     setEmail("")
     setProfileIconLink("")
     onClose()
-    window.location.reload()
+    window.location.href = "http://localhost:3000/home"
   }
 
 
