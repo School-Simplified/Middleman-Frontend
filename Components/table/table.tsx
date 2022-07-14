@@ -57,22 +57,14 @@ const Table = (props: any) => {
   };
 
   const onColumnSelect = (selectedList: any[], selectedItem: any[]) => {
-    console.log(selectedList)
-    console.log(selectedItem)
     const tempSelectedList = [...selectedList]
     setSelectedColumnOptions(tempSelectedList)
   }
 
   const onColumnRemove = (selectedList: any[], removedItem: any[]) => {
-    console.log(selectedList)
-    console.log(removedItem)
     const tempSelectedList = [...selectedList]
     setSelectedColumnOptions(tempSelectedList)
   }
-
-  useEffect(() => {
-    console.log(selectedColumnOptions)
-  }, [selectedColumnOptions])
 
   /*
   const deleteUser = async (row: any) => {
