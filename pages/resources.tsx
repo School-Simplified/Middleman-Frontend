@@ -31,6 +31,13 @@ const Resources: NextPage = () => {
         <div className="w-full px-5 py-3">
 
         <h1 className="font-semibold text-5xl mb-4">Resources</h1>
+
+        <h1 className="font-semibold text-3xl mt-10 mb-1">Middleman App Bugs, Questions, and Feature Requests</h1>
+        <div>
+          Please contact Josef (pancakes#1412) or Jason (Jaysunny#4060) on Discord.
+        </div>
+
+        <h1 className="font-semibold text-3xl mt-10 mb-1">Organization Resources</h1>
         <div>
             <ResourceItem 
                 Name="Employee Handbook" 
@@ -39,10 +46,7 @@ const Resources: NextPage = () => {
             />
         </div>
 
-        <br></br>
-        <br></br>
-
-        <h1 className="font-semibold text-4xl mb-4">Discord Servers</h1>
+        <h1 className="font-semibold text-3xl mt-10 mb-1">Discord Servers</h1>
         <div className="grid grid-cols-2 gap-4">
             <ResourceItem 
                 Name="School Simplified Main Discord" 
