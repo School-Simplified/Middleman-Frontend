@@ -10,7 +10,7 @@ import {
     AlertDialogOverlay,
   } from '@chakra-ui/react'
 
-const VolunteerStatusForm = params => {
+const VolunteerStatusForm = (params:any) => {
 
   type UserInfo = {
     activityStatus: string
