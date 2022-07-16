@@ -3,29 +3,27 @@ import Head from "next/head";
 import Image from "next/image";
 import { useEffect } from "react";
 import styles from "../styles/Home.module.css";
-import Router from "next/router"
+import Router from "next/router";
 import { useState } from "react";
-
 const Home: NextPage = () => {
-
-  const [loaded,setLoaded] = useState(false)
+  const [loaded, setLoaded] = useState(false);
   useEffect(() => {
-    const {pathname} = Router
+    const { pathname } = Router;
     // conditional redirect
-    if(pathname == '/' ){
-        // with router.push the page may be added to history
-        // the browser on history back will  go back to this page and then forward again to the redirected page
-        // you can prevent this behaviour using location.replace
-        Router.push('/home')
-       //location.replace("/hello-nextjs")
-    }else{
-        setLoaded(true)
+    if (pathname == "/") {
+      // with router.push the page may be added to history
+      // the browser on history back will  go back to this page and then forward again to the redirected page
+      // you can prevent this behaviour using location.replace
+      Router.push("/home");
+      //location.replace("/hello-nextjs")
+    } else {
+      setLoaded(true);
     }
-  },[]);
-  
-  if(!loaded){
-    return <div></div> //show nothing or a loader
-}
+  }, []);
+
+  if (!loaded) {
+    return <div></div>; //show nothing or a loader
+  }
 
   return (
     <div className={styles.container}>

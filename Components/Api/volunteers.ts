@@ -1,5 +1,6 @@
 import axios from "axios";
-const API_URL = process.env.API_URL;
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
+
 const scriptId = "16CDtcdnJV_2MxXdRUXRLmfWMm1cUewpzzFCd2QOf07BPXvQJx4LXxdh0";
 type Volunteer = {
   fullName: string;

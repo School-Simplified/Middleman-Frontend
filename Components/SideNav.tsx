@@ -13,14 +13,14 @@ import {
   AlertDialogContent,
   AlertDialogOverlay,
 } from "@chakra-ui/react";
-const API_URL = process.env.API_URL;
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
 const MenuItem = ({ children, Name }: { children: any; Name: string }) => {
   const link: string = Name.toLocaleLowerCase();
   return (
     <div
       className="flex justify-between items-center w-full hover:shadow-xl py-5 rounded-xl px-5 mt-3 cursor-pointer"
       onClick={function () {
-        window.location.pathname = `/${link}`;
+        window.location.href = `/${link}`;
       }}
     >
       {children}
