@@ -1,6 +1,6 @@
 import React from "react";
 
-export const GlobalFilter = ({ filter, setFilter }) => {
+export const GlobalFilter = ({ filter, setFilter }: any) => {
   return (
     <span className="font-semibold">
       Search: {""}

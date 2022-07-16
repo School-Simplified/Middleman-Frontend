@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useState } from "react";
 import { useTable, useGlobalFilter } from "react-table";
 import COLUMNS from "./columns";
 import { AiOutlinePlus } from "react-icons/ai";
-import Multiselect from 'multiselect-react-dropdown';
+import Multiselect from "multiselect-react-dropdown";
 import { GlobalFilter } from "./GlobalFilter";
 import { DeleteIcon, EditIcon, CloseIcon, UpDownIcon } from "@chakra-ui/icons";
 import {
@@ -18,35 +18,34 @@ import VolunteerStatusForm from "./volunteerStatusForm";
 import CreateVolunteerForm from "./createVolunteerForm";
 
 const Table = (props: any) => {
-
   const defaultColumns = [
     {
       Header: "Name",
-      accessor: 'fullName',
+      accessor: "fullName",
     },
     {
       Header: "Org Email",
-      accessor: 'orgEmail',
+      accessor: "orgEmail",
     },
     {
       Header: "Discord ID",
-      accessor: 'discordTag',
+      accessor: "discordTag",
     },
     {
       Header: "Status",
-      accessor: 'activityStatus',
-    }
-  ]
-  
+      accessor: "activityStatus",
+    },
+  ];
+
   const volData = props.volData;
   const [visible, setVisiblity] = useState(false);
   const [updateFormVisible, setUpdateFormVisible] = useState(false);
   const [statusFormVisible, setStatusFormVisible] = useState(false);
   const [updateUserID, setUpdateUserID] = useState(-1);
-  const [columnOptions, setColumnOptions] = useState<any[]>(COLUMNS)
-  const [selectedColumnOptions, setSelectedColumnOptions] = useState<any[]>(defaultColumns)
+  const [columnOptions, setColumnOptions] = useState<any[]>(COLUMNS);
+  const [selectedColumnOptions, setSelectedColumnOptions] =
+    useState<any[]>(defaultColumns);
   const columns = useMemo(() => selectedColumnOptions, [selectedColumnOptions]);
-
 
   // data props
   const data = volData;
@@ -57,14 +56,14 @@ const Table = (props: any) => {
   };
 
   const onColumnSelect = (selectedList: any[], selectedItem: any[]) => {
-    const tempSelectedList = [...selectedList]
-    setSelectedColumnOptions(tempSelectedList)
-  }
+    const tempSelectedList = [...selectedList];
+    setSelectedColumnOptions(tempSelectedList);
+  };
 
   const onColumnRemove = (selectedList: any[], removedItem: any[]) => {
-    const tempSelectedList = [...selectedList]
-    setSelectedColumnOptions(tempSelectedList)
-  }
+    const tempSelectedList = [...selectedList];
+    setSelectedColumnOptions(tempSelectedList);
+  };
 
   /*
   const deleteUser = async (row: any) => {
@@ -77,25 +76,25 @@ const Table = (props: any) => {
   const getUser = async (id: number) => {
     const resp = await getVolunteerByID(id);
     return resp;
-  }
+  };
 
   const updateUser = async (req_data: any) => {
     const resp = await updateVolunteer(updateUserID, req_data);
     await props.userUpdated();
     alert("user updated!");
-    setUpdateFormVisible(false)
-    setStatusFormVisible(false)
-  }
+    setUpdateFormVisible(false);
+    setStatusFormVisible(false);
+  };
 
   const getUpdateUserRow = async (row: any) => {
     setUpdateUserID(row.original.ID);
-    setUpdateFormVisible(true)
-  }
+    setUpdateFormVisible(true);
+  };
 
   const getStatusUserRow = async (row: any) => {
     setUpdateUserID(row.original.ID);
-    setStatusFormVisible(true)
-  }
+    setStatusFormVisible(true);
+  };
 
   const {
     getTableProps,
@@ -105,6 +104,7 @@ const Table = (props: any) => {
     rows,
     prepareRow,
     state,
+    // @ts-ignore
     setGlobalFilter,
   } = useTable(
     {
@@ -113,6 +113,7 @@ const Table = (props: any) => {
     },
     useGlobalFilter
   );
+  // @ts-ignore
   const { globalFilter } = state;
   return (
     <div style={{ width: "10 rem" }}>
@@ -134,36 +135,41 @@ const Table = (props: any) => {
             onClick={() => setVisiblity(true)}
           />
           {/*create user modal*/}
-          {visible &&
-          <CreateVolunteerForm
-            setVisible={setVisiblity}
-            createUser={createUser}
-          />
-          }
+          {visible && (
+            <CreateVolunteerForm
+              setVisible={setVisiblity}
+              createUser={createUser}
+            />
+          )}
         </div>
         {/*update user modal*/}
-        {updateFormVisible && 
-        <UpdateVolunteerForm 
-          setVisible={setUpdateFormVisible} 
-          updateUser={updateUser} 
-          updateUserID={updateUserID}
-          getUser={getUser}
-        />}
+        {updateFormVisible && (
+          <UpdateVolunteerForm
+            setVisible={setUpdateFormVisible}
+            updateUser={updateUser}
+            updateUserID={updateUserID}
+            getUser={getUser}
+          />
+        )}
         {/*update user status modal*/}
-        {statusFormVisible && 
-        <VolunteerStatusForm 
-          setVisible={setStatusFormVisible} 
-          updateUser={updateUser} 
-          updateUserID={updateUserID}
-          getUser={getUser}
-        />}
+        {statusFormVisible && (
+          <VolunteerStatusForm
+            setVisible={setStatusFormVisible}
+            updateUser={updateUser}
+            updateUserID={updateUserID}
+            getUser={getUser}
+          />
+        )}
       </div>
       <table {...getTableProps()}>
         <thead>
           {headerGroups.map((headerGroup) => (
             <tr {...headerGroup.getHeaderGroupProps()}>
               {headerGroup.headers.map((column) => (
-                <th {...column.getHeaderProps()}>{column.render("Header")} <UpDownIcon className="float-right mt-1"/> </th>
+                <th {...column.getHeaderProps()}>
+                  {column.render("Header")}{" "}
+                  <UpDownIcon className="float-right mt-1" />{" "}
+                </th>
               ))}
             </tr>
           ))}
@@ -184,18 +190,19 @@ const Table = (props: any) => {
                         />
                       </td>
                     );
-                  }
-                  else if (cell.column.Header == "Status") {
+                  } else if (cell.column.Header == "Status") {
                     var color;
-                    if (cell.value == "Active") {color = "text-green-500"}
-                    else if (cell.value == "On break") {color = "text-yellow-400"}
-                    else if (cell.value == "Resigned") {color = "text-red-500"}
+                    if (cell.value == "Active") {
+                      color = "text-green-500";
+                    } else if (cell.value == "On break") {
+                      color = "text-yellow-400";
+                    } else if (cell.value == "Resigned") {
+                      color = "text-red-500";
+                    }
 
                     return (
                       <td {...cell.getCellProps()}>
-                        <span className={color}>
-                          {cell.render("Cell")}{" "}
-                        </span>
+                        <span className={color}>{cell.render("Cell")} </span>
                         <EditIcon
                           className="float-right"
                           onClick={() => getStatusUserRow(row)}

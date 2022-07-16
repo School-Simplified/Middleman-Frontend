@@ -1,7 +1,10 @@
 import { useState, useEffect } from "react";
 import type { NextPage } from "next";
 
-import { getGoogleVolunteers, getVolunteers } from "../Components/Api/volunteers";
+import {
+  getGoogleVolunteers,
+  getVolunteers,
+} from "../Components/Api/volunteers";
 import Table from "../Components/table/table";
 import SideNav from "../Components/SideNav";
 
@@ -20,12 +23,11 @@ const Volunteers: NextPage = () => {
 
   useEffect(() => {
     getAllHRVolunteers();
-    getAllGoogleVolunteers()
+    getAllGoogleVolunteers();
   }, []);
 
   return (
     <>
-      <script src="https://apis.google.com/js/api.js"></script>
       <div className="w-full flex">
         <div className="w-[20%] h-screen sticky top-0 2xl:w-[15%]">
           <SideNav />
