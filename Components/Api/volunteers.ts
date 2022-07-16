@@ -1,5 +1,5 @@
 import axios from "axios";
-const API_URL = "http://127.0.0.1:8000";
+const API_URL = process.env.API_URL;
 const scriptId = "16CDtcdnJV_2MxXdRUXRLmfWMm1cUewpzzFCd2QOf07BPXvQJx4LXxdh0";
 type Volunteer = {
   fullName: string;
@@ -8,15 +8,6 @@ type Volunteer = {
 };
 
 export const getVolunteers = async () => {
-  // //const { loading, error, data } = useQuery(getUsersQuery);
-  // const { loading, error, data } = await client.query({
-  //   query: volunteersQuery,
-  // });
-
-  // console.log(data);
-  // //return result;
-  // return data;
-
   const response = await axios.get(`${API_URL}/api/volunteers`);
   return response.data;
 };
@@ -57,6 +48,9 @@ export const createVolunteer = async (data: any) => {
     }
   );
   console.log(googleResponse);
+  if (response.data.error) {
+    alert("Error while creating GSuite account: " + response.data.error);
+  }
   return response.data;
 };
 
