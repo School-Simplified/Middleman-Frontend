@@ -8,6 +8,7 @@
     <div class="h-full flex flex-col justify-center">
       <NavList>
         <NavListItemLink to="/">Dashboard</NavListItemLink>
+        <NavListItemLink to="/db">Staff Database</NavListItemLink>
         <NavListItemLink to="/profile">My Profile </NavListItemLink>
         <NavListItem><InternalServicesMenu /></NavListItem>
         <NavListItem><ToolsMenu /></NavListItem>

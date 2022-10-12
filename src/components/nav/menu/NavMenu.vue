@@ -13,7 +13,7 @@
       leave-from-class="translate-y-0 opacity-100"
       leave-to-class="translate-y-1 opacity-0"
     >
-      <PopoverPanel class="absolute z-10 mt-8">
+      <PopoverPanel class="absolute z-10 mt-8 opacity-100">
         <div class="shadow-2xl rounded-md text-grey">
           <ul class="list-none w-72">
             <slot></slot>
