@@ -4,6 +4,7 @@ module.exports = {
   theme: {
     extend: {
       colors: {
+        brand: "#6C7DFE",
         grey: "#343D46",
         selected: "#FFD470",
         white: "#E6E7E8",
@@ -12,4 +13,5 @@ module.exports = {
       },
     },
   },
+  plugins: [],
 };
