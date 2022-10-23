@@ -17,7 +17,7 @@ const sendBreakRequest = async () => {
   console.log(start.value, end.value);
   if (!start.value || !end.value) return;
   const result = await createBreakRequestTicket(start.value, end.value);
-  if (!result) {
+  if (1) {
     // do error stuff
   } else {
     // do non error stuff
