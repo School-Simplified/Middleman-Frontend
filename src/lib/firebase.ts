@@ -44,3 +44,7 @@ export async function initializeFirebase() {
 export function getUsername() {
   return user.displayName ?? null;
 }
+
+export function getImageUrl() {
+  return user.photoURL ?? null;
+}
