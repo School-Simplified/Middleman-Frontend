@@ -4,10 +4,13 @@ import App from "./App.vue";
 import router from "./router";
 import "./index.css";
 import "./assets/main.css";
+import { initializeFirebase } from "./lib/firebase";
+async function bootstrap() {
+  await initializeFirebase();
+  const app = createApp(App);
+  app.use(createPinia());
+  app.use(router);
+  app.mount("#app");
+}
 
-const app = createApp(App);
-
-app.use(createPinia());
-app.use(router);
-
-app.mount("#app");
+bootstrap();

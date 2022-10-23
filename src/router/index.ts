@@ -4,6 +4,7 @@ import StaffDatabase from "../views/StaffDatabase.vue";
 import Profile from "../views/Profile.vue";
 import BreakRequest from "../views/internal_services/BreakRequest.vue";
 import InternalServices from "../views/InternalServices.vue";
+import { initializeFirebase } from "@/lib/firebase";
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -48,5 +49,5 @@ const router = createRouter({
     },
   ],
 });
-router.beforeEach((to, from) => {});
+router.beforeEach(async (to, from) => {});
 export default router;
