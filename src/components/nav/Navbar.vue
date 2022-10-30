@@ -24,14 +24,14 @@
         <img
           class="w-10 h-10 rounded-full mx-2 ring-2 ring-gray-300 hover:ring-gray-400"
           :src="profile"
-          alt="Bordered avatar"
+          alt="PFP"
         />
       </NavList>
     </div>
   </nav>
 </template>
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
 import NavListItem from "./list/NavListItem.vue";
 import ToolsMenu from "./menu/ToolsMenu.vue";
 import InternalServicesMenu from "./menu/InternalServicesMenu.vue";
@@ -45,7 +45,11 @@ import {
 import ResourcesMenu from "./menu/ResourcesMenu.vue";
 import NavList from "./list/NavList.vue";
 import NavListItemLink from "./list/NavListItemLink.vue";
-import { getImageUrl } from "@/lib/firebase";
-
-const profile = ref(getImageUrl());
+import { getImageUrl } from "@/lib";
+const profile = ref("null");
+onMounted(() => {
+  const url = getImageUrl();
+  console.log("URL: " + url);
+  profile.value = url;
+});
 </script>

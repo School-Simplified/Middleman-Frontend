@@ -12,7 +12,7 @@ import { ref, watch } from "vue";
 import { createBreakRequestTicket } from "@/lib/tickets";
 const start = ref();
 const end = ref();
-
+const reason = ref<string>("");
 const sendBreakRequest = async () => {
   console.log(start.value, end.value);
   if (!start.value || !end.value) return;

@@ -4,7 +4,8 @@ import StaffDatabase from "../views/StaffDatabase.vue";
 import Profile from "../views/Profile.vue";
 import BreakRequest from "../views/internal_services/BreakRequest.vue";
 import InternalServices from "../views/InternalServices.vue";
-import { initializeFirebase } from "@/lib/firebase";
+import { isAuthed } from "@/lib/firebase";
+import Login from "@/views/Login.vue";
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -15,6 +16,11 @@ const router = createRouter({
       meta: {
         auth: "USER",
       },
+    },
+    {
+      path: "/login",
+      name: "Login",
+      component: Login,
     },
     {
       path: "/db",
@@ -49,5 +55,10 @@ const router = createRouter({
     },
   ],
 });
-router.beforeEach(async (to, from) => {});
+router.beforeEach(async (to, from) => {
+  if (!isAuthed() && to.path != "/login") {
+    console.log("push");
+    router.push("/login");
+  }
+});
 export default router;
