@@ -4,6 +4,8 @@ import { getDocs, getFirestore } from "firebase/firestore";
 import { doc, getDoc, setDoc, updateDoc, collection } from "firebase/firestore";
 import { useRouter } from "vue-router";
 import { getAuth, GoogleAuthProvider, onAuthStateChanged } from "firebase/auth";
+import { authUser } from "./auth";
+
 const router = useRouter();
 const firebaseConfig = {
   apiKey: "AIzaSyBuWQMnbQO8jyzi0P9Pc5sUQL_zNFSf5Z8",
@@ -28,18 +30,19 @@ export async function initializeFirebase() {
   _firebase.provider = authProvider;
   _firebase.db = firestore;
 }
-async function authenticate(_user: any) {
-  _firebase.auth.updateCurrentUser(_user);
-}
 
 export function getUsername() {
-  return _firebase.auth.currentUser?.displayName || "null";
+  return authUser.value.firstName || "null";
 }
 
 export function getImageUrl() {
-  return _firebase.auth.currentUser?.photoURL || "null";
+  return authUser.value.pfp || "null";
 }
 
-export function isAuthed() {
+export function isGoogleAuthed() {
   return !!_firebase.auth.currentUser;
+}
+
+export function profileCompleted() {
+  return authUser.value.completed;
 }

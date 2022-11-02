@@ -49,7 +49,7 @@ import { getImageUrl } from "@/lib";
 const profile = ref("null");
 onMounted(() => {
   const url = getImageUrl();
-  console.log("URL: " + url);
+  "URL: " + url;
   profile.value = url;
 });
 </script>

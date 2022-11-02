@@ -9,7 +9,7 @@ import Navbar from "./components/nav/Navbar.vue";
     <div>
       <Navbar />
     </div>
-    <div class="grow">
+    <div class="h-full max-h-full">
       <RouterView />
     </div>
   </div>

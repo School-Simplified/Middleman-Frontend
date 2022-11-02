@@ -1,8 +1,14 @@
 <template>
-  <button class="p-8 rounded text-white bg-brand" @click="login">Login</button>
-  <button class="p-8 rounded text-white bg-brand" @click="logout">
-    Logout
-  </button>
+  <div
+    class="h-screen w-screen fixed top-0 z-10 bg-brand grid place-content-center"
+  >
+    <button
+      class="px-12 py-8 rounded text-brand text-xl border-2 bg-white border-white"
+      @click="login"
+    >
+      Login :)
+    </button>
+  </div>
 </template>
 <script setup lang="ts">
 import { signInWithRedirect, signOut, onAuthStateChanged } from "firebase/auth";
@@ -15,8 +21,6 @@ const login = async () => {
 };
 const watcher = onAuthStateChanged(_firebase.auth, async (user) => {
   if (user) {
-    console.log("Authenticated");
-
     router.push("/");
   }
 });

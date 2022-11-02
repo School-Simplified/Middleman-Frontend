@@ -4,7 +4,7 @@ import StaffDatabase from "../views/StaffDatabase.vue";
 import Profile from "../views/Profile.vue";
 import BreakRequest from "../views/internal_services/BreakRequest.vue";
 import InternalServices from "../views/InternalServices.vue";
-import { isAuthed } from "@/lib/firebase";
+import { isGoogleAuthed, profileCompleted } from "@/lib/firebase";
 import Login from "@/views/Login.vue";
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -55,10 +55,15 @@ const router = createRouter({
     },
   ],
 });
-router.beforeEach(async (to, from) => {
-  if (!isAuthed() && to.path != "/login") {
-    console.log("push");
+router.beforeEach(async (to, from, next) => {
+  if (!isGoogleAuthed() && to.path != "/login") {
     router.push("/login");
+    next();
+  } else if (!profileCompleted() && to.path != "/profile") {
+    router.push("/profile");
+    next();
+  } else {
+    next();
   }
 });
 export default router;

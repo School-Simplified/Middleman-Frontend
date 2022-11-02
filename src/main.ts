@@ -1,16 +1,17 @@
 import { createApp } from "vue";
 import { createPinia } from "pinia";
 import App from "./App.vue";
-import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { getAuth } from "firebase/auth";
+import type { User } from "firebase/auth";
 import router from "./router";
 import "./index.css";
 import "./assets/main.css";
-import { initializeFirebase } from "./lib/firebase";
+import { initializeFirebase, setUser } from "./lib";
 async function bootstrap() {
   await initializeFirebase();
-  getAuth().onAuthStateChanged((user) => {
-    if (!user) {
-      router.push("/login");
+  getAuth().onAuthStateChanged(async (googleUser: User) => {
+    if (googleUser) {
+      await setUser(googleUser);
     }
     const app = createApp(App);
     app.use(createPinia());

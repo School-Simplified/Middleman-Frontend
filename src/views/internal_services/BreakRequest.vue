@@ -14,7 +14,6 @@ const start = ref();
 const end = ref();
 const reason = ref<string>("");
 const sendBreakRequest = async () => {
-  console.log(start.value, end.value);
   if (!start.value || !end.value) return;
   const result = await createBreakRequestTicket(start.value, end.value);
   if (1) {
