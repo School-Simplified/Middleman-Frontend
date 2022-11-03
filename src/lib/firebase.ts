@@ -31,18 +31,10 @@ export async function initializeFirebase() {
   _firebase.db = firestore;
 }
 
-export function getUsername() {
-  return authUser.value.firstName || "null";
-}
-
-export function getImageUrl() {
-  return authUser.value.pfp || "null";
-}
-
 export function isGoogleAuthed() {
   return !!_firebase.auth.currentUser;
 }
 
 export function profileCompleted() {
-  return authUser.value.completed;
+  return authUser?.value?.completed;
 }

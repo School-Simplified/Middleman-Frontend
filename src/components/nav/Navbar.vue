@@ -23,6 +23,7 @@
 
         <img
           class="w-10 h-10 rounded-full mx-2 ring-2 ring-gray-300 hover:ring-gray-400"
+          referrerpolicy="no-referrer"
           :src="profile"
           alt="PFP"
         />

@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import { Cog6ToothIcon } from "@heroicons/vue/24/outline";
 import { onMounted, ref } from "vue";
-import { getUserByEmail, getUsername } from "@/lib";
+import { getUserByEmail, getFirstName } from "@/lib";
 import { getAllUsers } from "@/lib";
 import { updateDoc } from "firebase/firestore";
-const name = ref(getUsername());
+const name = ref(getFirstName());
 </script>
 
 <template>

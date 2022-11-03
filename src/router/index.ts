@@ -6,6 +6,8 @@ import BreakRequest from "../views/internal_services/BreakRequest.vue";
 import InternalServices from "../views/InternalServices.vue";
 import { isGoogleAuthed, profileCompleted } from "@/lib/firebase";
 import Login from "@/views/Login.vue";
+import CommunityServiceHours from "@/views/internal_services/CommunityServiceHours.vue";
+
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -51,19 +53,24 @@ const router = createRouter({
           name: "Request a break",
           component: BreakRequest,
         },
+        {
+          path: "community-service",
+          name: "Service Hours",
+          component: CommunityServiceHours,
+        },
       ],
     },
   ],
 });
-router.beforeEach(async (to, from, next) => {
-  if (!isGoogleAuthed() && to.path != "/login") {
-    router.push("/login");
-    next();
-  } else if (!profileCompleted() && to.path != "/profile") {
-    router.push("/profile");
-    next();
-  } else {
-    next();
+router.beforeEach(async (to, from) => {
+  if (!isGoogleAuthed()) {
+    if (to.path != "/login") {
+      router.push("/login");
+    }
+  } else if (!profileCompleted()) {
+    if (to.path != "/profile") {
+      router.push("/profile");
+    }
   }
 });
 export default router;

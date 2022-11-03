@@ -5,11 +5,11 @@ import Navbar from "./components/nav/Navbar.vue";
 </script>
 
 <template>
-  <div class="w-screen h-screen overflow-hidden flex flex-col">
+  <div class="w-screen h-screen flex flex-col flex-1">
     <div>
       <Navbar />
     </div>
-    <div class="h-full max-h-full">
+    <div class="h-full max-h-full min-h-0">
       <RouterView />
     </div>
   </div>

@@ -2,8 +2,8 @@
   <NavMenu title="Internal Services">
     <NavMenuListItemLink to=""> Schedule an Appointment </NavMenuListItemLink>
     <NavMenuListItemLink to=""> Tech Support </NavMenuListItemLink>
-    <NavMenuListItemLink to="">
-      Withdraw Service Hours & Hours
+    <NavMenuListItemLink to="/services/community-service">
+      Log Service Hours
     </NavMenuListItemLink>
     <NavMenuListItemLink to=""> Make a Suggestion </NavMenuListItemLink>
     <NavMenuListItemLink to="/services/break">
