@@ -4,7 +4,9 @@
       <span class="mt-8 block text-3xl w-full pb-4 border-b-2 border-brand">{{
         $route.name
       }}</span>
+      <Suspense>
       <router-view></router-view>
+    </Suspense>
     </div>
   </div>
 </template>
