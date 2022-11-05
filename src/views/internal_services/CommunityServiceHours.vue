@@ -3,7 +3,7 @@
     <span class="text-lg">Your CS Hour Logs</span>
     <table
       v-if="data.length > 0"
-      class="table-auto block border-2 border-slate-800 rounded-md p-4 w-full h-1/3 overflow-y-scroll"
+      class="table-auto block border-2 border-slate-800 rounded-md p-4 w-full h-5/6 overflow-y-scroll"
     >
       <thead class="w-full flex justify-between">
         <th>From</th>
