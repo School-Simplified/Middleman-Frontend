@@ -1,6 +1,13 @@
 /** @type {import('tailwindcss').Config} */
+
+const colors = require("tailwindcss/colors");
+
 module.exports = {
-  content: ["./index.html", "./src/**/*.{vue,js,ts,jsx,tsx}"],
+  content: [
+    "./index.html",
+    "./src/**/*.{vue,js,ts,jsx,tsx}",
+    "./node_modules/vue-tailwind-datepicker/**/*.js",
+  ],
   theme: {
     extend: {
       colors: {
@@ -10,8 +17,10 @@ module.exports = {
         white: "#E6E7E8",
         hovered: "#EBEBEB",
         chalk: "#FFFFFF",
+        "vtd-primary": colors.sky,
+        "vtd-secondary": colors.gray,
       },
     },
   },
-  plugins: [],
+  plugins: [require("@tailwindcss/forms")],
 };

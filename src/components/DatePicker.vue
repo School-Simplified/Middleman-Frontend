@@ -1,0 +1,20 @@
+<script setup>
+import { ref } from "vue";
+import VueTailwindDatepicker from 'vue-tailwind-datepicker'
+
+const dateValue = ref({
+  startDate: "",
+  endDate: ""
+})
+
+const formatter = ref({
+  date: 'MM/DD/YYYY',
+  month: 'MMMM'
+})
+</script>
+
+<template>
+  <div class="relative">
+    <vue-tailwind-datepicker as-single use-range :formatter="formatter" v-model="dateValue" />
+  </div>
+</template>
