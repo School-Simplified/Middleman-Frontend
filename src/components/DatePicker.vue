@@ -1,6 +1,6 @@
-<!-- NOTE: Watch issue for updates so we can safely switch over to ts with no issues: https://github.com/elreco/vue-tailwind-datepicker/issues/15 -->
+<!-- NOTE: Watch issue for updates so we can safely switch over to ts with no issues: https://github.com/elreco/vue-tailwind-datepicker/issues/17 -->
 
-<script setup>
+<script setup lang="ts">
 import { ref } from "vue";
 import VueTailwindDatepicker from 'vue-tailwind-datepicker'
 
