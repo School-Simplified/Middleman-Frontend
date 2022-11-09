@@ -1,6 +1,16 @@
 export type SSUser = {
   orgEmail: string;
-  personalEmail: string;
+  personalInfo: {
+    address: string;
+    email: string;
+    phoneNumber: string;
+    school: {
+      name: string;
+      address: string;
+      cellNumber: string;
+    };
+  };
+
   firstName: string;
   lastName: string;
   supervisor: string | undefined; // ref to document like /users/josef.macera@ss // NOTE doing this to shut Firebase up
