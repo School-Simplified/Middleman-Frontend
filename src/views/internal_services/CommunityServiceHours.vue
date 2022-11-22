@@ -1,16 +1,14 @@
 <template>
-  <div class="min-h-0">
-    <div class="my-2 flex flex-row justify-between">
+  <div class="min-h-0 h-full flex flex-col">
+    <div class="flex flex-row justify-between my-2">
       <span class="text-lg">Your CS Hour Logs</span>
-      <div class="">
-        <button
-          type="button"
-          @click="openForm"
-          class="rounded-[3px] bg-grey p-2 text-white"
-        >
-          Create Log
-        </button>
-      </div>
+      <button
+        type="button"
+        @click="openForm"
+        class="rounded-[3px] bg-grey p-2 text-white"
+      >
+        Create Log
+      </button>
       <TransitionRoot :show="isOpen" as="template">
         <Dialog as="div" @close="closeForm" class="relative z-10">
           <TransitionChild
@@ -58,8 +56,10 @@
                               class="peer block w-full rounded-md border border-slate-300 bg-white px-3 py-2 placeholder-slate-400 shadow-sm invalid:border-pink-500 invalid:text-pink-600 focus:border-sky-500 focus:outline-none focus:ring-1 focus:ring-sky-500 focus:invalid:border-pink-500 focus:invalid:ring-pink-500 disabled:border-slate-200 disabled:bg-slate-50 disabled:text-slate-500 disabled:shadow-none sm:text-sm"
                               placeholder="e.g. 8"
                               required
+                              v-model="hours"
                             />
                             <p
+                              v-if="hours <= 0"
                               class="invisible mt-2 text-sm text-pink-600 peer-invalid:visible"
                             >
                               Please input a number.
@@ -74,11 +74,12 @@
                               <ArrowRightIcon class="mt-0.5 h-4 w-4" />
                               <p>To</p>
                             </label>
-                            <DatePickerVue
+                            <DatePicker
                               type="text"
                               id="datepicker"
                               class="w-inherit border-none bg-inherit"
                               required
+                              v-model="breakDuration"
                             />
                           </div>
                           <div class="sm:col-span-2">
@@ -91,11 +92,13 @@
                               required
                               class="peer block w-full resize-none rounded-md border border-slate-300 bg-white px-3 py-2 placeholder-slate-400 shadow-sm invalid:border-pink-500 invalid:text-pink-600 focus:border-sky-500 focus:outline-none focus:ring-1 focus:ring-sky-500 focus:invalid:border-pink-500 focus:invalid:ring-pink-500 disabled:border-slate-200 disabled:bg-slate-50 disabled:text-slate-500 disabled:shadow-none sm:text-sm"
                               placeholder="Reason for log..."
+                              v-model="reason"
                             />
                             <p
                               class="invisible mt-2 text-sm text-pink-600 peer-invalid:visible"
                             >
                               Please provide a reason.
+                              {{ breakDuration }}
                             </p>
                           </div>
                         </form>
@@ -126,50 +129,134 @@
       </TransitionRoot>
     </div>
     <table
-      v-if="data.length > 0"
+      v-if="requestedLogs.length > 0"
       class="block h-5/6 w-full table-auto overflow-y-scroll rounded-md border-2 border-slate-800 p-4"
     >
       <thead class="flex w-full justify-between">
         <th>From</th>
         <th>To</th>
         <th>Reason</th>
-        <th>Approved</th>
+        <th>Status</th>
       </thead>
       <tbody class="flex w-full flex-col">
         <tr
-          v-for="csh in data"
+          v-for="csh in requestedLogs"
           :key="csh.id"
           class="my-2 flex w-full justify-between justify-items-stretch rounded-md border-2 border-hovered p-2"
         >
-          <td>{{ new Date(csh.from).toLocaleDateString() }}</td>
-          <td>{{ new Date(csh.to).toLocaleDateString() }}</td>
+          <td>
+            {{ new Date(csh.from.nanoseconds).toLocaleDateString() }}
+          </td>
+          <td>{{ new Date(csh.to.nanoseconds).toLocaleDateString() }}</td>
           <td>
             {{ csh.reason }}
           </td>
-          <td v-if="csh.approved">Yes :)</td>
-          <td v-else>No</td>
+          <td v-if="csh.approved == true">Approved</td>
+          <td v-else-if="csh.approved == false">Rejected</td>
+          <td v-else>Waiting</td>
         </tr>
       </tbody>
     </table>
     <p v-else>You have no CS hour logs.</p>
   </div>
+  <div class="flex flex-col min-h-0 h-full" v-if="showApprovalTable">
+    <span class="my-2">Pending Log Requests</span>
+    <table
+      class="block w-full table-auto overflow-y-scroll rounded-md border-2 border-slate-800 p-4"
+    >
+      <thead class="flex w-full justify-between">
+        <th>From</th>
+        <th>To</th>
+        <th>Reason</th>
+        <th>Action</th>
+      </thead>
+      <tbody class="flex w-full flex-col">
+        <tr
+          v-for="csh in logsToVerify"
+          :key="csh.id"
+          class="my-2 flex w-full justify-between justify-items-stretch rounded-md border-2 border-hovered p-2"
+        >
+          <td>
+            {{ new Date(csh.from.nanoseconds).toLocaleDateString() }}
+          </td>
+          <td>{{ new Date(csh.to.nanoseconds).toLocaleDateString() }}</td>
+          <td>
+            {{ csh.reason }}
+          </td>
+          <td class="flex items-center w-16 space-x-2 justify-center">
+            <Popover class="relative min-h-0">
+              <PopoverButton>
+                <CheckIcon
+                  class="h-6 w-6 border-2 border-green-400 rounded-lg p-1 hover:bg-green-100"
+              /></PopoverButton>
+
+              <PopoverPanel
+                class="fixed z-10 bg-green-100 border-green-400 border-2 p-4 rounded-md"
+              >
+                <span>Are you sure?</span>
+                <br />
+                <button class="bg-green-400 text-chalk p-2 rounded-md">
+                  Yes
+                </button>
+              </PopoverPanel>
+            </Popover>
+            <Popover class="relative min-h-0">
+              <PopoverButton>
+                <XMarkIcon
+                  class="h-6 w-6 border-2 border-red-400 rounded-lg p-1 hover:bg-red-100"
+              /></PopoverButton>
+
+              <PopoverPanel
+                class="fixed z-10 bg-red-100 border-red-400 border-2 p-4 rounded-md"
+              >
+                <span>Are you sure?</span>
+                <br />
+                <button class="bg-red-400 text-chalk p-2 rounded-md">
+                  Yes
+                </button>
+              </PopoverPanel>
+            </Popover>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 </template>
 
 <script setup lang="ts">
 import { ref } from "vue";
-import { getCsLogsFromUser } from "@/lib";
+import {
+  createCsLog,
+  getCsLogsFromUser,
+  getOrgEmail,
+  isAssociate,
+  getLogsToVerify,
+} from "@/lib";
 import {
   Dialog,
   TransitionRoot,
   TransitionChild,
   DialogPanel,
   DialogTitle,
+  Popover,
+  PopoverButton,
+  PopoverPanel,
 } from "@headlessui/vue";
-import { ArrowRightIcon } from "@heroicons/vue/24/outline";
-import DatePickerVue from "../../components/DatePicker.vue";
-
+import {
+  ArrowRightIcon,
+  CheckIcon,
+  XMarkIcon,
+} from "@heroicons/vue/24/outline";
+import DatePicker from "../../components/DatePicker.vue";
+const showApprovalTable = ref(!isAssociate());
+const breakDuration = ref({
+  startDate: "",
+  endDate: "",
+});
+const logsToVerify = ref(await getLogsToVerify());
 const isOpen = ref(false);
-
+const reason = ref("");
+const hours = ref(0);
 function openForm() {
   isOpen.value = true;
 }
@@ -178,156 +265,16 @@ function closeForm() {
   isOpen.value = false;
 }
 
-function onSubmit() {
+async function onSubmit() {
   isOpen.value = false;
-  // ... implement logic here
+  const newLog = await createCsLog(
+    reason.value,
+    hours.value,
+    new Date(breakDuration.value.startDate),
+    new Date(breakDuration.value.endDate)
+  );
+  requestedLogs.value.push(newLog);
 }
 
-console.log(await getCsLogsFromUser("anncine.lin@schoolsimplified.org"));
-const data = ref([
-  {
-    id: 1,
-    from: 1667452695199,
-    to: 1667452695199,
-    reason: "Creating Timmy Plushies",
-    hours: 40.5,
-    approved: false,
-  },
-  {
-    id: 2,
-    from: 1667452695199,
-    to: 1667452695199,
-    reason: "Creating Timmy Plushies",
-    hours: 40.5,
-    approved: false,
-  },
-  {
-    id: 1,
-    from: 1667452695199,
-    to: 1667452695199,
-    reason: "Creating Timmy Plushies",
-    hours: 40.5,
-    approved: false,
-  },
-  {
-    id: 2,
-    from: 1667452695199,
-    to: 1667452695199,
-    reason: "Creating Timmy Plushies",
-    hours: 40.5,
-    approved: false,
-  },
-  {
-    id: 1,
-    from: 1667452695199,
-    to: 1667452695199,
-    reason: "Creating Timmy Plushies",
-    hours: 40.5,
-    approved: false,
-  },
-  {
-    id: 2,
-    from: 1667452695199,
-    to: 1667452695199,
-    reason: "Creating Timmy Plushies",
-    hours: 40.5,
-    approved: false,
-  },
-  {
-    id: 1,
-    from: 1667452695199,
-    to: 1667452695199,
-    reason: "Creating Timmy Plushies",
-    hours: 40.5,
-    approved: false,
-  },
-  {
-    id: 2,
-    from: 1667452695199,
-    to: 1667452695199,
-    reason: "Creating Timmy Plushies",
-    hours: 40.5,
-    approved: false,
-  },
-  {
-    id: 1,
-    from: 1667452695199,
-    to: 1667452695199,
-    reason: "Creating Timmy Plushies",
-    hours: 40.5,
-    approved: false,
-  },
-  {
-    id: 2,
-    from: 1667452695199,
-    to: 1667452695199,
-    reason: "Creating Timmy Plushies",
-    hours: 40.5,
-    approved: false,
-  },
-  {
-    id: 1,
-    from: 1667452695199,
-    to: 1667452695199,
-    reason: "Creating Timmy Plushies",
-    hours: 40.5,
-    approved: false,
-  },
-  {
-    id: 2,
-    from: 1667452695199,
-    to: 1667452695199,
-    reason: "Creating Timmy Plushies",
-    hours: 40.5,
-    approved: false,
-  },
-  {
-    id: 1,
-    from: 1667452695199,
-    to: 1667452695199,
-    reason: "Creating Timmy Plushies",
-    hours: 40.5,
-    approved: false,
-  },
-  {
-    id: 2,
-    from: 1667452695199,
-    to: 1667452695199,
-    reason: "Creating Timmy Plushies",
-    hours: 40.5,
-    approved: false,
-  },
-  {
-    id: 1,
-    from: 1667452695199,
-    to: 1667452695199,
-    reason: "Creating Timmy Plushies",
-    hours: 40.5,
-    approved: false,
-  },
-  {
-    id: 2,
-    from: 1667452695199,
-    to: 1667452695199,
-    reason: "Creating Timmy Plushies",
-    hours: 40.5,
-    approved: false,
-  },
-  {
-    id: 1,
-    from: 1667452695199,
-    to: 1667452695199,
-    reason: "Creating Timmy Plushies",
-    hours: 40.5,
-    approved: false,
-  },
-  {
-    id: 2,
-    from: 1667452695199,
-    to: 1667452695199,
-    reason: "Creating Timmy Plushies",
-    hours: 40.5,
-    approved: false,
-  },
-]);
+const requestedLogs = ref(await getCsLogsFromUser(getOrgEmail()));
 </script>

@@ -51,9 +51,14 @@ export function getOrgEmail() {
 }
 
 export function getPersonalEmail() {
-  return authUser.value?.personalEmail;
+  return authUser.value?.personalInfo.email;
 }
-
+export function getPersonalPhoneNumber() {
+  return authUser.value?.personalInfo.phoneNumber;
+}
+export function getPersonalAddress() {
+  return authUser.value?.personalInfo.address;
+}
 export function getRole() {
   return authUser.value?.role;
 }
@@ -68,4 +73,20 @@ export function getUserDepartment() {
 
 export function getUserTeam() {
   return authUser.value?.team;
+}
+
+export function getSchoolNumber() {
+  return authUser.value?.personalInfo.school.cellNumber;
+}
+
+export function getSchoolAddress() {
+  return authUser.value?.personalInfo.school.address;
+}
+
+export function getSchoolName() {
+  return authUser.value?.personalInfo.school.name;
+}
+
+export function isAssociate() {
+  return authUser.value?.role == "Associate";
 }

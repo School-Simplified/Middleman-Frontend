@@ -31,7 +31,8 @@ export type SSUser = {
 };
 
 export type CSHLog = {
-  approved: boolean;
+  id?: number;
+  approved?: boolean;
   approvedBy: string;
   checkedOut: boolean;
   from: number;

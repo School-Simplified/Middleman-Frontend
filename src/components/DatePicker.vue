@@ -1,15 +1,17 @@
 <!-- NOTE: Watch issue for updates so we can safely switch over to ts with no issues: https://github.com/elreco/vue-tailwind-datepicker/issues/17 -->
 
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref, watch } from "vue";
 import VueTailwindDatepicker from "vue-tailwind-datepicker";
 import { ArrowRightIcon } from "@heroicons/vue/24/outline";
-
+const props = defineProps(["modelValue"]);
+const emits = defineEmits(["update:modelValue"]);
 const dateValue = ref({
   startDate: "",
   endDate: "",
 });
 
+watch(dateValue, (newVal) => emits("update:modelValue", dateValue.value));
 const formatter = ref({
   date: "MM/DD/YYYY",
   month: "MMMM",
