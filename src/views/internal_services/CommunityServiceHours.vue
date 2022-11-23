@@ -147,9 +147,9 @@
           }"
         >
           <td>
-            {{ new Date(csh.from.nanoseconds).toLocaleDateString() }}
+            {{ csh.from.toString() }}
           </td>
-          <td>{{ new Date(csh.to.nanoseconds).toLocaleDateString() }}</td>
+          <td>{{ csh.to.toString() }}</td>
           <td>
             {{ csh.reason }}
           </td>
@@ -179,9 +179,9 @@
           class="my-2 flex w-full justify-between justify-items-stretch rounded-md border-2 border-hovered p-2"
         >
           <td>
-            {{ new Date(csh.from.nanoseconds).toLocaleDateString() }}
+            {{ csh.from.toString() }}
           </td>
-          <td>{{ new Date(csh.to.nanoseconds).toLocaleDateString() }}</td>
+          <td>{{ csh.to.toString() }}</td>
           <td>
             {{ csh.reason }}
           </td>
@@ -280,6 +280,7 @@ function openForm() {
   isOpen.value = true;
 }
 const logsToVerify = ref(await getLogsToVerify());
+const requestedLogs = ref(await getCsLogsFromUser(getOrgEmail()));
 async function rejectCsLog(id: string, close: any) {
   const newLog = await rejectLog(id);
   close();
@@ -302,6 +303,4 @@ async function onSubmit() {
   );
   requestedLogs.value.push(newLog);
 }
-
-const requestedLogs = ref(await getCsLogsFromUser(getOrgEmail()));
 </script>

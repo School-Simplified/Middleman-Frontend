@@ -1,3 +1,5 @@
+import type { Timestamp } from "firebase/firestore";
+
 export type SSUser = {
   orgEmail: string;
   personalInfo: {
@@ -31,12 +33,12 @@ export type SSUser = {
 };
 
 export type CSHLog = {
-  id?: string;
+  id: string;
   approved?: boolean;
   approvedBy: string;
   checkedOut: boolean;
-  from: number;
-  to: number;
+  from: Timestamp;
+  to: Timestamp;
   hours: number;
   reason: number;
   requester: number;

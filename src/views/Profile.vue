@@ -286,6 +286,8 @@ const submittable = computed(() => {
   return team.value && dept.value && personalEmail.value && supervisor.value;
 });
 const schoolAddress = ref(getSchoolAddress() || "");
+const schoolNumber = ref(getSchoolNumber() || "");
+const schoolName = ref(getSchoolName() || "");
 
 const updateProfile = async () => {
   const userData: SSUser = {
@@ -299,7 +301,9 @@ const updateProfile = async () => {
       phoneNumber: phoneNumber.value,
       address: personalAddress.value,
       school: {
-        address,
+        address: schoolAddress.value,
+        cellNumber: schoolNumber.value,
+        name: schoolName.value,
       },
     },
     pfp: getImageUrl(),
