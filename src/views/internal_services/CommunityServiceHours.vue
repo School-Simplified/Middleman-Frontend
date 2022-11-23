@@ -147,9 +147,9 @@
           }"
         >
           <td>
-            {{ csh.from.toString() }}
+            {{ csh.from.toDate().toLocaleDateString() }}
           </td>
-          <td>{{ csh.to.toString() }}</td>
+          <td>{{ csh.to.toDate().toLocaleDateString() }}</td>
           <td>
             {{ csh.reason }}
           </td>
@@ -179,9 +179,9 @@
           class="my-2 flex w-full justify-between justify-items-stretch rounded-md border-2 border-hovered p-2"
         >
           <td>
-            {{ csh.from.toString() }}
+            {{ csh.from.toDate().toLocaleDateString() }}
           </td>
-          <td>{{ csh.to.toString() }}</td>
+          <td>{{ csh.to.toDate().toLocaleDateString() }}</td>
           <td>
             {{ csh.reason }}
           </td>
