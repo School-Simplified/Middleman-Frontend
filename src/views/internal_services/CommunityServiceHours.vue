@@ -2,13 +2,23 @@
   <div class="min-h-0 h-full flex flex-col">
     <div class="flex flex-row justify-between my-2">
       <span class="text-lg">Your CS Hour Logs</span>
-      <button
-        type="button"
-        @click="openForm"
-        class="rounded-[3px] bg-grey p-2 text-white"
-      >
-        Create Log
-      </button>
+      <div>
+        <button
+          type="button"
+          @click="openForm"
+          class="rounded-md bg-grey p-2 text-white border-2 border-grey"
+        >
+          Create Log
+        </button>
+        <button
+          type="button"
+          @click="openForm"
+          class="rounded-md border-grey border-2 p-2 ml-2"
+          v-if="logCheckOutQueue.length > 0"
+        >
+          Checkout Logs
+        </button>
+      </div>
       <TransitionRoot :show="isOpen" as="template">
         <Dialog as="div" @close="closeForm" class="relative z-10">
           <TransitionChild
@@ -129,63 +139,102 @@
     </div>
     <table
       v-if="requestedLogs.length > 0"
-      class="block h-5/6 w-full table-auto overflow-y-scroll rounded-md border-2 border-slate-800 p-4"
+      class="w-full table-auto overflow-y-scroll rounded-md border-2 border-slate-800 border-collapse p-4"
     >
-      <thead class="flex w-full justify-between">
-        <th>From</th>
-        <th>To</th>
-        <th>Reason</th>
-        <th>Status</th>
-      </thead>
-      <tbody class="flex w-full flex-col">
+      <tr class="text-left">
+        <th class="p-4 bg-slate-300 border-b-2 border-b-slate-700">
+          Requester
+        </th>
+        <th class="p-4 bg-slate-300 border-b-2 border-b-slate-700">From</th>
+        <th class="p-4 bg-slate-300 border-b-2 border-b-slate-700">To</th>
+        <th class="p-4 bg-slate-300 border-b-2 border-b-slate-700">Reason</th>
+        <th class="p-4 bg-slate-300 border-b-2 border-b-slate-700">Status</th>
+        <th
+          class="p-4 bg-slate-300 border-b-2 border-l-2 border-slate-700"
+          v-if="logsCanCheckOut.length > 0"
+        >
+          Action
+        </th>
+      </tr>
+      <tbody class="">
         <tr
           v-for="csh in requestedLogs"
           :key="csh.id"
-          class="my-2 flex w-full justify-between justify-items-stretch rounded-md border-2 border-hovered p-2"
+          class="w-full rounded-md p-4"
           :class="{
-            'bg-gray-200': csh.approved != undefined,
+            'bg-slate-100': csh.approved !== undefined,
           }"
         >
-          <td>
+          <td class="p-4">
+            {{ csh.requester }}
+          </td>
+          <td class="p-4">
             {{ csh.from.toDate().toLocaleDateString() }}
           </td>
-          <td>{{ csh.to.toDate().toLocaleDateString() }}</td>
-          <td>
+          <td class="p-4">
+            {{ csh.to.toDate().toLocaleDateString() }}
+          </td>
+          <td class="p-4">
             {{ csh.reason }}
           </td>
-          <td v-if="csh.approved == true">Approved</td>
-          <td v-else-if="csh.approved == false">Rejected</td>
-          <td v-else>Waiting</td>
+          <td
+            class="p-4"
+            :class="{
+              'border-r-2 border-slate-700': logsCanCheckOut.length > 0,
+            }"
+          >
+            <span v-if="csh.approved === true">Approved</span>
+            <span v-else-if="csh.approved === false">Rejected</span>
+            <span v-else>Waiting</span>
+          </td>
+          <td v-if="csh.approved" class="p-4">
+            <input
+              type="checkbox"
+              class="hue-rotate-30 filter"
+              @input="(e) => toggleLogCheckout(e, csh)"
+            />
+          </td>
         </tr>
       </tbody>
     </table>
     <p v-else>You have no CS hour logs.</p>
   </div>
   <div class="flex flex-col min-h-0 h-full" v-if="showApprovalTable">
-    <span class="my-2">Pending Log Requests</span>
+    <span class="my-2">Log Requests</span>
     <table
-      class="block w-full table-auto overflow-y-scroll rounded-md border-2 border-slate-800 p-4"
+      class="w-full table-auto overflow-y-scroll rounded-md border-2 border-slate-800 border-collapse p-4"
     >
-      <thead class="flex w-full justify-between">
-        <th>From</th>
-        <th>To</th>
-        <th>Reason</th>
-        <th>Action</th>
-      </thead>
-      <tbody class="flex w-full flex-col">
+      <tr class="text-left">
+        <th class="p-4 bg-slate-300 border-b-2 border-b-slate-700">
+          Requester
+        </th>
+        <th class="p-4 bg-slate-300 border-b-2 border-b-slate-700">From</th>
+        <th class="p-4 bg-slate-300 border-b-2 border-b-slate-700">To</th>
+        <th class="p-4 bg-slate-300 border-b-2 border-b-slate-700">Reason</th>
+        <th class="p-4 bg-slate-300 border-b-2 border-b-slate-700">Action</th>
+      </tr>
+      <tbody class="">
         <tr
           v-for="csh in logsToVerify"
           :key="csh.id"
-          class="my-2 flex w-full justify-between justify-items-stretch rounded-md border-2 border-hovered p-2"
+          class="w-full rounded-md p-4"
+          :class="{
+            'bg-slate-100': csh.approved !== undefined,
+          }"
         >
-          <td>
+          <td class="p-4">
+            {{ csh.requester }}
+          </td>
+          <td class="p-4">
             {{ csh.from.toDate().toLocaleDateString() }}
           </td>
-          <td>{{ csh.to.toDate().toLocaleDateString() }}</td>
-          <td>
+          <td class="p-4">
+            {{ csh.to.toDate().toLocaleDateString() }}
+          </td>
+          <td class="p-4">
             {{ csh.reason }}
           </td>
-          <td class="flex items-center w-16 space-x-2 justify-center">
+          <td class="flex items-center w-16 space-x-2 justify-center p-4">
             <Popover
               class="relative min-h-0"
               v-if="csh.approved == null || csh.approved == undefined"
@@ -203,7 +252,7 @@
                 <br />
                 <button
                   class="bg-green-400 text-chalk p-2 rounded-md"
-                  @click="approveCsLog(csh.id, close)"
+                  @click="approveCsLog(csh, close)"
                 >
                   Yes
                 </button>
@@ -268,6 +317,7 @@ import {
   XMarkIcon,
 } from "@heroicons/vue/24/outline";
 import DatePicker from "../../components/DatePicker.vue";
+import type { CSHLog } from "@/lib/types";
 const showApprovalTable = ref(!isAssociate());
 const breakDuration = ref({
   startDate: "",
@@ -279,14 +329,31 @@ const hours = ref(0);
 function openForm() {
   isOpen.value = true;
 }
+function toggleLogCheckout(e: Event, log: CSHLog) {
+  if ((e.target as HTMLInputElement).checked) {
+    logCheckOutQueue.value.push(log);
+  } else {
+    const mapped = logCheckOutQueue.value.map((l) => l.id);
+    const index = mapped.indexOf(log.id);
+    logCheckOutQueue.value.splice(index, 1);
+  }
+  console.log(logCheckOutQueue.value);
+}
 const logsToVerify = ref(await getLogsToVerify());
 const requestedLogs = ref(await getCsLogsFromUser(getOrgEmail()));
-async function rejectCsLog(id: string, close: any) {
-  const newLog = await rejectLog(id);
+const logsCanCheckOut = requestedLogs.value.filter(
+  (log) => log.checkedOut == false
+);
+const logCheckOutQueue = ref<CSHLog[]>([]);
+
+async function rejectCsLog(log: CSHLog, close: any) {
+  const newLog = await rejectLog(log.id);
+  log.approved = false;
   close();
 }
-async function approveCsLog(id: string, close: any) {
-  const newLog = await verifyLog(id);
+async function approveCsLog(log: CSHLog, close: any) {
+  const newLog = await verifyLog(log.id);
+  log.approved = true;
   close();
 }
 function closeForm() {
