@@ -1,12 +1,24 @@
+import type { Timestamp } from "firebase/firestore";
+
 export type SSUser = {
   orgEmail: string;
-  personalEmail: string;
+  personalInfo: {
+    address: string;
+    email: string;
+    phoneNumber: string;
+    school: {
+      name: string;
+      address: string;
+      cellNumber: string;
+    };
+  };
+
   firstName: string;
   lastName: string;
-  supervisor: string; // ref to document like /users/josef.macera@ss
+  supervisor: string | undefined; // ref to document like /users/josef.macera@ss // NOTE doing this to shut Firebase up
   created: number; // ms since timestamp
-  team: string;
-  department: string;
+  team: string | undefined; // doing this to shut Firebase up
+  department: string | undefined; // doing this to shut Firebase up
   pfp: string;
   completed: boolean;
   role:
@@ -16,15 +28,17 @@ export type SSUser = {
     | "Vice President"
     | "President"
     | "Executive Director"
-    | "Corporate Officer"; // setting of COs and EDs is manual
+    | "Corporate Officer" // setting of COs and EDs is manual
+    | undefined; // doing this to shut Firebase up
 };
 
 export type CSHLog = {
-  approved: boolean;
+  id: string;
+  approved?: boolean;
   approvedBy: string;
   checkedOut: boolean;
-  from: number;
-  to: number;
+  from: Timestamp;
+  to: Timestamp;
   hours: number;
   reason: number;
   requester: number;
