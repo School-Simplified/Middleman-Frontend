@@ -9,6 +9,7 @@ import {
   getDocs,
   Timestamp,
   addDoc,
+  updateDoc,
 } from "firebase/firestore";
 import type { SSUser, CSHLog } from "../types";
 import { getOrgEmail, getSupervisorEmail } from "../auth";
@@ -56,4 +57,23 @@ export async function getLogsToVerify(): Promise<Array<CSHLog>> {
     ret.push(l.data() as CSHLog);
   });
   return ret;
+}
+
+export async function verifyLog(logId: string): Promise<CSHLog> {
+  await updateDoc(doc(_firebase.db, "cs_hour_logs", logId), {
+    approved: true,
+    approvedBy: getOrgEmail(),
+  });
+  return (await (
+    await getDoc(doc(_firebase.db, "cs_hour_logs", logId))
+  ).data()) as CSHLog;
+}
+export async function rejectLog(logId: string): Promise<CSHLog> {
+  await updateDoc(doc(_firebase.db, "cs_hour_logs", logId), {
+    approved: false,
+    approvedBy: getOrgEmail(),
+  });
+  return (await (
+    await getDoc(doc(_firebase.db, "cs_hour_logs", logId))
+  ).data()) as CSHLog;
 }

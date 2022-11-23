@@ -98,7 +98,6 @@
                               class="invisible mt-2 text-sm text-pink-600 peer-invalid:visible"
                             >
                               Please provide a reason.
-                              {{ breakDuration }}
                             </p>
                           </div>
                         </form>
@@ -143,6 +142,9 @@
           v-for="csh in requestedLogs"
           :key="csh.id"
           class="my-2 flex w-full justify-between justify-items-stretch rounded-md border-2 border-hovered p-2"
+          :class="{
+            'bg-gray-200': csh.approved != undefined,
+          }"
         >
           <td>
             {{ new Date(csh.from.nanoseconds).toLocaleDateString() }}
@@ -184,38 +186,54 @@
             {{ csh.reason }}
           </td>
           <td class="flex items-center w-16 space-x-2 justify-center">
-            <Popover class="relative min-h-0">
+            <Popover
+              class="relative min-h-0"
+              v-if="csh.approved == null || csh.approved == undefined"
+            >
               <PopoverButton>
                 <CheckIcon
                   class="h-6 w-6 border-2 border-green-400 rounded-lg p-1 hover:bg-green-100"
               /></PopoverButton>
 
               <PopoverPanel
+                v-slot="{ close }"
                 class="fixed z-10 bg-green-100 border-green-400 border-2 p-4 rounded-md"
               >
                 <span>Are you sure?</span>
                 <br />
-                <button class="bg-green-400 text-chalk p-2 rounded-md">
+                <button
+                  class="bg-green-400 text-chalk p-2 rounded-md"
+                  @click="approveCsLog(csh.id, close)"
+                >
                   Yes
                 </button>
               </PopoverPanel>
             </Popover>
-            <Popover class="relative min-h-0">
+            <Popover
+              class="relative min-h-0"
+              v-if="csh.approved == null || csh.approved == undefined"
+            >
               <PopoverButton>
                 <XMarkIcon
                   class="h-6 w-6 border-2 border-red-400 rounded-lg p-1 hover:bg-red-100"
               /></PopoverButton>
 
               <PopoverPanel
+                v-slot="{ close }"
                 class="fixed z-10 bg-red-100 border-red-400 border-2 p-4 rounded-md"
               >
                 <span>Are you sure?</span>
                 <br />
-                <button class="bg-red-400 text-chalk p-2 rounded-md">
+                <button
+                  class="bg-red-400 text-chalk p-2 rounded-md"
+                  @click="rejectCsLog(csh.id, close)"
+                >
                   Yes
                 </button>
               </PopoverPanel>
             </Popover>
+            <span v-else-if="csh.approved">Approved</span>
+            <span v-else>Rejected</span>
           </td>
         </tr>
       </tbody>
@@ -231,6 +249,8 @@ import {
   getOrgEmail,
   isAssociate,
   getLogsToVerify,
+  rejectLog,
+  verifyLog,
 } from "@/lib";
 import {
   Dialog,
@@ -253,14 +273,21 @@ const breakDuration = ref({
   startDate: "",
   endDate: "",
 });
-const logsToVerify = ref(await getLogsToVerify());
 const isOpen = ref(false);
 const reason = ref("");
 const hours = ref(0);
 function openForm() {
   isOpen.value = true;
 }
-
+const logsToVerify = ref(await getLogsToVerify());
+async function rejectCsLog(id: string, close: any) {
+  const newLog = await rejectLog(id);
+  close();
+}
+async function approveCsLog(id: string, close: any) {
+  const newLog = await verifyLog(id);
+  close();
+}
 function closeForm() {
   isOpen.value = false;
 }
