@@ -91,8 +91,10 @@
                       >Direct Supervisor</span
                     >
                     <template #popper>
-                      <span class="text-xs">
-                        The email of your direct supervisor
+                      <span class="text-xs text-center">
+                        The email of your direct supervisor.
+                        <br />If your supervisor is under 18, they cannot verify
+                        CS hour logs.
                       </span>
                     </template>
                   </VTooltip></label
@@ -181,58 +183,31 @@
             >
             <div class="flex flex-col space-y-4">
               <div>
-                <label class="inline-block w-32">Department</label>
+                <label class="inline-block w-32">School Name</label>
                 <input
                   type="text"
                   class="border-2 border-slate-500 rounded-md mx-4 h-8 pl-2 disabled:bg-slate-300 disabled:cursor-not-allowed float-right w-96"
-                  v-model="dept"
+                  v-model="schoolName"
                   :disabled="!needToSetup"
                 />
               </div>
               <div>
-                <label class="inline-block w-32">Team</label>
+                <label class="inline-block w-32">Cell</label>
                 <input
                   type="text"
                   class="border-2 border-slate-500 rounded-md mx-4 h-8 pl-2 w-96 float-right disabled:bg-slate-300 disabled:cursor-not-allowed"
                   :disabled="!needToSetup"
-                  v-model="team"
+                  v-model="schoolNumber"
                 />
               </div>
               <div>
-                <label class="inline-block w-44">
-                  <VTooltip placement="bottom">
-                    <span class="border-b-2 border-dashed border-gray-300"
-                      >Direct Supervisor</span
-                    >
-                    <template #popper>
-                      <span class="text-xs">
-                        The email of your direct supervisor
-                      </span>
-                    </template>
-                  </VTooltip></label
-                >
+                <label class="inline-block w-32">School Address</label>
                 <input
                   type="text"
-                  class="border-2 border-slate-500 rounded-md mx-4 h-8 disabled:bg-slate-300 pl-2 w-96 float-right disabled:cursor-not-allowed"
-                  v-model="supervisor"
+                  class="border-2 border-slate-500 rounded-md mx-4 h-8 pl-2 w-96 float-right disabled:bg-slate-300 disabled:cursor-not-allowed"
                   :disabled="!needToSetup"
+                  v-model="schoolAddress"
                 />
-              </div>
-              <div>
-                <label class="inline-block w-32">Role</label>
-                <select
-                  v-model="role"
-                  class="border-2 border-slate-500 rounded-md mx-4 h-8 disabled:bg-slate-300 pl-2 w-96 float-right disabled:cursor-not-allowed"
-                  :disabled="!needToSetup"
-                >
-                  <option selected>Associate</option>
-                  <option>Manager</option>
-                  <option>Director</option>
-                  <option>Vice President</option>
-                  <option>President</option>
-                  <option v-if="!needToSetup">Corporate Officer</option>
-                  <option v-if="!needToSetup">Executive Director</option>
-                </select>
               </div>
             </div>
           </div>
