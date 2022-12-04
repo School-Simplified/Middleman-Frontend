@@ -2,7 +2,7 @@
   <div class="min-h-0 h-full flex flex-col">
     <div class="flex flex-row justify-between my-2">
       <span class="text-lg">Your CS Hour Logs</span>
-      <div>
+      <div class="flex">
         <button
           type="button"
           @click="openForm"
@@ -10,14 +10,22 @@
         >
           Create Log
         </button>
-        <button
-          type="button"
-          @click="openForm"
-          class="rounded-md border-grey border-2 p-2 ml-2"
-          v-if="logCheckOutQueue.length > 0"
-        >
-          Checkout Logs
-        </button>
+        <Popover class="block" v-if="logCheckOutQueue.length > 0">
+          <PopoverButton class="rounded-md border-grey border-2 p-2 ml-2"
+            >Checkout Logs</PopoverButton
+          >
+          <PopoverPanel class="absolute z-10">
+            <div
+              class="p-4 shadow-md bg-chalk rounded-md flex justify-center flex-col"
+            >
+              <label class="mb-4">Are you sure?</label>
+              <br />
+              <button class="bg-green-200 hover:bg-green-400 p-2 rounded-md">
+                Yes
+              </button>
+            </div>
+          </PopoverPanel>
+        </Popover>
       </div>
       <TransitionRoot :show="isOpen" as="template">
         <Dialog as="div" @close="closeForm" class="relative z-10">
