@@ -283,7 +283,7 @@
                 <br />
                 <button
                   class="bg-red-400 text-chalk p-2 rounded-md"
-                  @click="rejectCsLog(csh.id, close)"
+                  @click="rejectCsLog(csh, close)"
                 >
                   Yes
                 </button>
