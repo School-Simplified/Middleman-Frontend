@@ -194,11 +194,12 @@
               'border-r-2 border-slate-700': logsCanCheckOut.length > 0,
             }"
           >
-            <span v-if="csh.approved === true">Approved</span>
+            <span v-if="csh.checkedOut">Checked Out</span>
+            <span v-else-if="csh.approved === true">Approved</span>
             <span v-else-if="csh.approved === false">Rejected</span>
             <span v-else>Waiting</span>
           </td>
-          <td v-if="csh.approved" class="p-4">
+          <td v-if="csh.approved && !csh.checkedOut" class="p-4">
             <input
               type="checkbox"
               class="hue-rotate-30 filter"
@@ -248,7 +249,10 @@
           <td class="flex items-center w-16 space-x-2 justify-center p-4">
             <Popover
               class="relative min-h-0"
-              v-if="csh.approved == null || csh.approved == undefined"
+              v-if="
+                csh.approved == null ||
+                (csh.approved == undefined && !csh.checkedOut)
+              "
             >
               <PopoverButton>
                 <CheckIcon
@@ -292,6 +296,7 @@
                 </button>
               </PopoverPanel>
             </Popover>
+            <span v-else-if="csh.checkedOut">Checked Out</span>
             <span v-else-if="csh.approved">Approved</span>
             <span v-else>Rejected</span>
           </td>
