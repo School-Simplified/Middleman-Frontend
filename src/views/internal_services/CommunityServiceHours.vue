@@ -20,7 +20,10 @@
             >
               <label class="mb-4">Are you sure?</label>
               <br />
-              <button class="bg-green-200 hover:bg-green-400 p-2 rounded-md">
+              <button
+                class="bg-green-200 hover:bg-green-400 p-2 rounded-md"
+                @click="checkoutLogs()"
+              >
                 Yes
               </button>
             </div>
@@ -308,6 +311,7 @@ import {
   getLogsToVerify,
   rejectLog,
   verifyLog,
+  checkoutCsLog,
 } from "@/lib";
 import {
   Dialog,
@@ -378,4 +382,9 @@ async function onSubmit() {
   );
   requestedLogs.value.push(newLog);
 }
+
+const checkoutLogs = async () => {
+  await checkoutCsLog(logCheckOutQueue.value);
+  alert("You will get an email with your certificate soon.");
+};
 </script>
