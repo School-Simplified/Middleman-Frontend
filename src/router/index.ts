@@ -68,9 +68,9 @@ router.beforeEach(async (to, from) => {
       router.push("/login");
     }
   } else if (!profileCompleted()) {
-    if (to.path != "/profile") {
-      router.push("/profile");
-    }
+    // if (to.path != "/profile") {
+    // router.push("/profile");
+    // }
   }
 });
 export default router;
