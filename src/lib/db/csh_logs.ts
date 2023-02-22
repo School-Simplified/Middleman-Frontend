@@ -21,7 +21,7 @@ export async function getCsLogsFromUser(email: string): Promise<Array<CSHLog>> {
   );
   const ret: CSHLog[] = [];
   (await getDocs(q)).forEach((l) => {
-    ret.push(l.data() as CSHLog);
+    ret.push({ ...l.data(), id: l.id } as CSHLog);
   });
   return ret;
 }
@@ -80,7 +80,6 @@ export async function rejectLog(logId: string): Promise<CSHLog> {
 
 export async function checkoutCsLog(logs: CSHLog[]) {
   const totalHours: number = logs.reduce((a, o) => a + o.hours, 0);
-  console.log(totalHours);
   await addDoc(collection(_firebase.db, "cs_hour_checkouts"), {
     hours: totalHours,
     logs: logs.map((log) => `/cs_hour_logs/${log.id}`),

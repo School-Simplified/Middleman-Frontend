@@ -40,6 +40,6 @@ export type CSHLog = {
   from: Timestamp;
   to: Timestamp;
   hours: number;
-  reason: number;
+  reason: string;
   requester: number;
 };
